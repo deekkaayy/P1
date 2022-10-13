@@ -1,5 +1,5 @@
 def limpa_texto(texto):
-    texto = ' '.join(texto.split()) #Juntar vários espaços
+    texto = ' '.join(texto.split())  #Juntar vários espaços
     texto = texto.replace('\t', '') #Substituição dos caracteres brancos
     texto = texto.replace('\n', '')
     texto = texto.replace('\v', '')
@@ -9,8 +9,10 @@ def limpa_texto(texto):
 def corta_texto(texto,numero):
     if len(limpa_texto(texto)) > numero:
         texto1 = texto[:numero] #Primeiro string com o numero de caracteres
-        texto2 = texto[numero:len(limpa_texto(texto))] #Segundo string com o resto dos caracteres
-    return texto1,texto2
+        texto2 = texto[numero:len(limpa_texto(texto))] #Segundo string com o resto dos caracteres\
+        return texto1,texto2
+    else:
+        return texto
 def insere_espacos(texto,numero):
     texto = limpa_texto(texto)
     i = 0
@@ -30,26 +32,27 @@ def justifica_texto(texto,numero):
 def produto_interno(tuplo1,tuplo2):
     if len(tuplo1) != len(tuplo2):
         raise ValueError('tuplos invalidos')
-    sum, i = 0
+    sum, i = 0, 0
     while i < len(tuplo1):
         sum += tuplo1[i] * tuplo2[i]
         i += 1
     return float(sum)
 def calcula_quocientes(dicionario,inteiro):
-    dic = {}
-    key = dicionario.keys()
-    val = dicionario.values()
-    for key in dicionario:
-        for i in range(1,inteiro):
-            dic[key] = dic[val[i]].append(float(dicionario[key])/i)
-    '''
+    dic = dicionario
     dicKeys = list(dicionario)
     dicVals = list(dicionario.values())
     for i in range(len(dicionario)):
+        dic[dicKeys[i]] = list(dicKeys[i])
         for j in range(1,inteiro):
-            dic[dicKeys[i]] = dicVals[i].append(float((dicVals[0])/j))
-#            dic[dicKeys[i]] += str(float((dicVals[0])/j)+', ')
-'''
+            dic[dicKeys[i]] += [dicVals[i]/j]
+
+    '''
+    for i in range(len(dicionario)):
+        for j in range(1,inteiro):
+            dic[dicKeys[i]].append(dicVals[i]/j)
+    '''
+    return dic
+
 
 def verifica_convergencia(tuplo1,tuplo2,tuplo3,real):
     A1, c1 = ((1, -0.5), (-1, 2)), (-0.4, 1.9)
@@ -72,5 +75,5 @@ calcula_quocientes({'A':12000, 'B':7500, 'C':5250, 'D':3000}, 7)
 print( produto_interno((1,2,3,4,5),(-4,5,-6,7,-8)))
 '''
 print(calcula_quocientes({'A':12000, 'B':7500, 'C':5250, 'D':3000}, 7))
-'''dic = {'A':12000, 'B':7500, 'C':5250, 'D':3000}
-print(dic.values())'''
+
+
