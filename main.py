@@ -6,11 +6,19 @@ def limpa_texto(texto):
     texto = texto.replace('\f', '')
     texto = texto.replace('\r', '')
     return texto
-def corta_texto(texto,numero):
+def corta_texto(texto,numero):#DUVIDA AQUI, E SUPOSTO APARECER PALAVRA COMPLETA CASO NUM < LEN DA PRIMEIRA PALVRA
     if len(limpa_texto(texto)) > numero:
         texto1 = texto[:numero] #Primeiro string com o numero de caracteres
         texto2 = texto[numero:len(limpa_texto(texto))] #Segundo string com o resto dos caracteres\
-        return texto1,texto2
+        if texto1.count(' ') != 0:
+            texto1 = texto[:texto1.rindex(' ')]
+            texto2 = texto[texto1.rindex(' '):len(limpa_texto(texto))]
+            return texto1,texto2
+        elif texto1.count(' ') == 0:
+            texto
+            return texto
+        '''else:
+            return texto1,texto2'''
     else:
         return texto
 def insere_espacos(texto,numero):
