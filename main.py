@@ -1,3 +1,6 @@
+import string
+
+
 def limpa_texto(texto):
     texto = ' '.join(texto.split())  #Juntar vários espaços
     texto = texto.replace('\t', '') #Substituição dos caracteres brancos
@@ -15,10 +18,11 @@ def corta_texto(texto,numero):#DUVIDA AQUI, E SUPOSTO APARECER PALAVRA COMPLETA 
             texto2 = texto[texto1.rindex(' '):len(limpa_texto(texto))]
             return texto1,texto2
         elif texto1.count(' ') == 0:
-            texto
-            return texto
-        '''else:
-            return texto1,texto2'''
+            texto1 = ''
+            texto2 = texto
+            return texto1,texto2
+        else:
+            return texto1,texto2
     else:
         return texto
 def insere_espacos(texto,numero):
@@ -45,22 +49,50 @@ def produto_interno(tuplo1,tuplo2):
         sum += tuplo1[i] * tuplo2[i]
         i += 1
     return float(sum)
+def key(numero,dicionario):
+    for k, v in dicionario.items():
+       if numero in v:
+            return k
 def calcula_quocientes(dicionario,inteiro):
+    values = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
     dic = dicionario
     dicKeys = list(dicionario)
     dicVals = list(dicionario.values())
     for i in range(len(dicionario)):
         dic[dicKeys[i]] = list(dicKeys[i])
-        for j in range(1,inteiro):
+        for j in range(1,inteiro+1):
             dic[dicKeys[i]] += [dicVals[i]/j]
-
-    '''
-    for i in range(len(dicionario)):
-        for j in range(1,inteiro):
-            dic[dicKeys[i]].append(dicVals[i]/j)
-    '''
+    for (k, v), elem in zip(dic.items(), values):
+        if elem in v:
+            v.remove(elem)
     return dic
+def atribui_mandatos(dicionario,inteiro):
+    dic = (calcula_quocientes(dicionario,inteiro))
+    dicVals=[]
+    dicKeys = list(dic.keys())
+    for i in range(len(dic)):
+        dicVals += dic[dicKeys[i]]
+    dicVals.sort(reverse=True)
+    mdt = []
+    for i in range(inteiro):
+        for k,v in dicionario.items():
+            if dicVals[i] in v:
+                mdt.append(k)
 
+        #mdt.append(dic.get(dicVals[i]))
+
+    '''mdt = []
+    j = 0
+    i= 0
+    for l,i in dic.items():
+        while len(mdt) < inteiro:
+            if dicValsUnsorted[i] == dicVals[j]:
+                mdt += dicKeys[j]
+                j += 1
+                i += 1
+            else:
+                i += 1'''
+    return mdt
 
 def verifica_convergencia(tuplo1,tuplo2,tuplo3,real):
     A1, c1 = ((1, -0.5), (-1, 2)), (-0.4, 1.9)
@@ -82,6 +114,6 @@ tuplo2 = print(input('Introduza o segundo tuplo'))
 calcula_quocientes({'A':12000, 'B':7500, 'C':5250, 'D':3000}, 7)
 print( produto_interno((1,2,3,4,5),(-4,5,-6,7,-8)))
 '''
-print(calcula_quocientes({'A':12000, 'B':7500, 'C':5250, 'D':3000}, 7))
+print(atribui_mandatos({'A':12000, 'B':7500, 'C':5250, 'D':3000}, 7))
 
 
