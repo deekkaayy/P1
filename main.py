@@ -49,49 +49,38 @@ def produto_interno(tuplo1,tuplo2):
         sum += tuplo1[i] * tuplo2[i]
         i += 1
     return float(sum)
-def key(numero,dicionario):
-    for k, v in dicionario.items():
-       if numero in v:
-            return k
 def calcula_quocientes(dicionario,inteiro):
-    values = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
     dic = dicionario
     dicKeys = list(dicionario)
     dicVals = list(dicionario.values())
     for i in range(len(dicionario)):
-        dic[dicKeys[i]] = list(dicKeys[i])
-        for j in range(1,inteiro+1):
-            dic[dicKeys[i]] += [dicVals[i]/j]
-    for (k, v), elem in zip(dic.items(), values):
-        if elem in v:
-            v.remove(elem)
+        dic[dicKeys[i]] = []
+        for j in range(1, (inteiro + 1)):
+            dic[dicKeys[i]] += [dicVals[i] / j]
     return dic
+def reduz_listas(dic,int):
+    dicKeys= list(dic.keys())
+    dicVals= list(dic.values())
+    for i in range(int):
+        p = 0
+        while p < i:
+            dic[dicKeys[i]].pop()
+            dic[dicKeys[i]].pop()
+            p += 1
+    return
 def atribui_mandatos(dicionario,inteiro):
-    dic = (calcula_quocientes(dicionario,inteiro))
-    dicVals=[]
+    dic = calcula_quocientes(dicionario,inteiro)
+    dicVals = []
     dicKeys = list(dic.keys())
     for i in range(len(dic)):
         dicVals += dic[dicKeys[i]]
     dicVals.sort(reverse=True)
     mdt = []
+    dic = reduz_listas(dic,inteiro)
     for i in range(inteiro):
-        for k,v in dicionario.items():
+        for k,v in dic.items():
             if dicVals[i] in v:
                 mdt.append(k)
-
-        #mdt.append(dic.get(dicVals[i]))
-
-    '''mdt = []
-    j = 0
-    i= 0
-    for l,i in dic.items():
-        while len(mdt) < inteiro:
-            if dicValsUnsorted[i] == dicVals[j]:
-                mdt += dicKeys[j]
-                j += 1
-                i += 1
-            else:
-                i += 1'''
     return mdt
 
 def verifica_convergencia(tuplo1,tuplo2,tuplo3,real):
