@@ -1,6 +1,3 @@
-import string
-
-
 def limpa_texto(texto):
     texto = ' '.join(texto.split())  #Juntar vários espaços
     texto = texto.replace('\t', '') #Substituição dos caracteres brancos
@@ -28,8 +25,12 @@ def corta_texto(texto,numero):#DUVIDA AQUI, E SUPOSTO APARECER PALAVRA COMPLETA 
 def insere_espacos(texto,numero):
     texto = limpa_texto(texto)
     i = 0
+    n = 2
     if len(texto) < numero:
         while i < numero:
+            if i >= len(texto):
+                i = 0
+                n += 1
             if texto[i] == ' ' and len(texto) < numero: #Introduzir mais um espaço caso o caracter selecionado é espaço
                 texto = texto[:i] + ' ' + texto[i:]
                 i += 2 #Tendo em conta ao espaço adicionado, procede-se dois caracteres para chegar à proxima palavra
@@ -60,14 +61,13 @@ def calcula_quocientes(dicionario,inteiro):
     return dic
 def reduz_listas(dic,int):
     dicKeys= list(dic.keys())
-    dicVals= list(dic.values())
-    for i in range(int):
+    for i in range(len(dicKeys)):
         p = 0
-        while p < i:
-            dic[dicKeys[i]].pop()
-            dic[dicKeys[i]].pop()
-            p += 1
-    return
+        while p <= i:
+            if len(dicKeys[i]) != 0:
+                dic[dicKeys[i]].pop()
+                p += 1
+    return dic
 def atribui_mandatos(dicionario,inteiro):
     dic = calcula_quocientes(dicionario,inteiro)
     dicVals = []
@@ -82,27 +82,27 @@ def atribui_mandatos(dicionario,inteiro):
             if dicVals[i] in v:
                 mdt.append(k)
     return mdt
-
+def obtem_partidos(info):
+    names = []
+    for i, j in info.items():
+        if type(j) == dict:
+            for j, k in j.items():
+                if type(k) == dict:
+                    names += k.keys()
+    names = list(set(names))
+    names = sorted(names)
+    return names
 def verifica_convergencia(tuplo1,tuplo2,tuplo3,real):
     A1, c1 = ((1, -0.5), (-1, 2)), (-0.4, 1.9)
 
     return
-
-
-'''
-texto = str(input('introduza texto: '))
-print(limpa_texto(texto))
-numero = int(input('introduza um numero: '))
-print(limpa_texto(texto))
-print(corta_texto(texto,numero))
-print(insere_espacos(texto,numero))
-print(justifica_texto(texto,numero))
-for l in justifica_texto(texto, numero): print(l)
-tuplo1 = print(input('Introduza o primeiro tuplo'))
-tuplo2 = print(input('Introduza o segundo tuplo'))
-calcula_quocientes({'A':12000, 'B':7500, 'C':5250, 'D':3000}, 7)
-print( produto_interno((1,2,3,4,5),(-4,5,-6,7,-8)))
-'''
-print(atribui_mandatos({'A':12000, 'B':7500, 'C':5250, 'D':3000}, 7))
+info = {
+'Endor': {'deputados': 7,
+    'votos': {'A':12000, 'B':7500, 'C':5250, 'D':3000}},
+'Hoth': {'deputados': 6,
+    'votos': {'B':11500, 'A':9000, 'E':5000, 'D':1500}},
+'Tatooine': {'deputados': 3,
+    'votos': {'A':3000, 'B':1900}}}
+print(obtem_partidos(info))
 
 
