@@ -92,10 +92,21 @@ def obtem_partidos(info):
     names = list(set(names))
     names = sorted(names)
     return names
-def verifica_convergencia(tuplo1,tuplo2,tuplo3,real):
-    A1, c1 = ((1, -0.5), (-1, 2)), (-0.4, 1.9)
-
-    return
+def obtem_resultado_eleicoes(info):
+    names = obtem_partidos(info)
+    somas = {}
+    soma = 0
+    for n in range(len(names)):
+        soma = 0
+        for i, j in info.items():
+            if type(j) == dict:
+                for j, k in j.items():
+                    if type(k) == dict:
+                        for l,m in k.items():
+                            if names[n] == l:
+                                soma += m
+                                somas[n] = soma
+    return list(somas.values())
 info = {
 'Endor': {'deputados': 7,
     'votos': {'A':12000, 'B':7500, 'C':5250, 'D':3000}},
@@ -103,6 +114,12 @@ info = {
     'votos': {'B':11500, 'A':9000, 'E':5000, 'D':1500}},
 'Tatooine': {'deputados': 3,
     'votos': {'A':3000, 'B':1900}}}
-print(obtem_partidos(info))
+print(obtem_resultado_eleicoes(info))
+def verifica_convergencia(tuplo1,tuplo2,tuplo3,real):
+    A1, c1 = ((1, -0.5), (-1, 2)), (-0.4, 1.9)
+
+    return
+
+
 
 
