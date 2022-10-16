@@ -40,6 +40,7 @@ def justifica_texto(texto,numero):
     if type(texto) != str or type(numero) != int:
         raise ValueError('argumentos invalidos')
     texto = limpa_texto(texto)
+
     txt = tuple(texto[i:i+numero] for i in range (0, len(texto), numero)) #"Tuplificar" o texto com indice do numero introduzido
     return txt
 def produto_interno(tuplo1,tuplo2):
