@@ -39,7 +39,7 @@ def insere_espacos(texto,numero):
 def justifica_texto(texto,numero):
     if type(texto) != str or type(numero) != int:
         raise ValueError('argumentos invalidos')
-    texto = texto.replace('\t''\n''\v''\f''r', '') #Remoção dos caracteres brancos exceto espaços
+    texto = limpa_texto(texto)
     txt = tuple(texto[i:i+numero] for i in range (0, len(texto), numero)) #"Tuplificar" o texto com indice do numero introduzido
     return txt
 def produto_interno(tuplo1,tuplo2):
@@ -106,6 +106,7 @@ def obtem_resultado_eleicoes(info):
                             if names[n] == l:
                                 soma += m
                                 somas[n] = soma
+    somas = sorted()
     return list(somas.values())
 info = {
 'Endor': {'deputados': 7,
@@ -114,7 +115,13 @@ info = {
     'votos': {'B':11500, 'A':9000, 'E':5000, 'D':1500}},
 'Tatooine': {'deputados': 3,
     'votos': {'A':3000, 'B':1900}}}
-print(obtem_resultado_eleicoes(info))
+#print(obtem_resultado_eleicoes(info))
+cad = ('Computers are incredibly \n\tfast, \n\t\taccurate'
+' \n\t\t\tand stupid. \n Human beings are incredibly slow '
+'inaccurate, and brilliant. \n Together they are powerful '
+'beyond imagination.')
+print(justifica_texto(cad,60))
+
 def verifica_convergencia(tuplo1,tuplo2,tuplo3,real):
     A1, c1 = ((1, -0.5), (-1, 2)), (-0.4, 1.9)
 
