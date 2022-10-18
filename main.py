@@ -7,18 +7,17 @@ def limpa_texto(texto):
     texto = texto.replace('\r', '')
     return texto
 def corta_texto(texto,numero):#DUVIDA AQUI, E SUPOSTO APARECER PALAVRA COMPLETA CASO NUM < LEN DA PRIMEIRA PALVRA
-    if len(limpa_texto(texto)) > numero:
-        texto1 = texto[:numero] #Primeiro string com o numero de caracteres
-        texto2 = texto[numero:len(limpa_texto(texto))] #Segundo string com o resto dos caracteres\
-        if texto1.count(' ') != 0:
-            texto1 = texto[:texto1.rindex(' ')]
-            texto2 = texto[texto1.rindex(' '):len(limpa_texto(texto))]
+    textoLimpo = limpa_texto(texto)
+    if textoLimpo > numero:
+        texto1 = limpa_texto(texto)[:numero] #Primeiro string com o numero de caracteres
+        texto2 = limpa_texto(texto)[numero:len(textoLimpo)]
+        if texto1.count(' ') !=0:
+            texto1 = textoLimpo[:texto1.rindex(' ')]
+            texto2 = textoLimpo[len(texto1)+1:len(textoLimpo)]
             return texto1,texto2
         elif texto1.count(' ') == 0:
-            texto1 = ''
-            texto2 = texto
-            return texto1,texto2
-        else:
+            texto1 = texto[:limpa_texto(texto).find(' ')]
+            texto2 = texto[limpa_texto(texto).find(' '):len(limpa_texto(texto))]
             return texto1,texto2
     else:
         return texto
@@ -26,21 +25,26 @@ def insere_espacos(texto,numero):
     texto = limpa_texto(texto)
     i = 0
     n = 2
-    if len(texto) < numero:
+    while len(texto) < numero:
         while i < numero:
-            if i >= len(texto):
-                i = 0
-                n += 1
             if texto[i] == ' ' and len(texto) < numero: #Introduzir mais um espaço caso o caracter selecionado é espaço
                 texto = texto[:i] + ' ' + texto[i:]
-                i += 2 #Tendo em conta ao espaço adicionado, procede-se dois caracteres para chegar à proxima palavra
+                i += n #Tendo em conta ao espaço adicionado, procede-se dois caracteres para chegar à proxima palavra
+            elif i > len(texto):
+                i = 0
+
             else: i += 1
+        i = 0
+        n += 1
     return texto
+#print(insere_espacos('Fundamentos da Programacao!!!', 40))
 def justifica_texto(texto,numero):
     if type(texto) != str or type(numero) != int:
         raise ValueError('argumentos invalidos')
     texto = limpa_texto(texto)
-
+    char = numero
+    if type(texto[char-1])!= (' ', ',', '.') and type(texto[char+1]) != (' ', ',', '.'):
+        i = texto.rindex(' ')
     txt = tuple(texto[i:i+numero] for i in range (0, len(texto), numero)) #"Tuplificar" o texto com indice do numero introduzido
     return txt
 def produto_interno(tuplo1,tuplo2):
@@ -80,9 +84,10 @@ def atribui_mandatos(dicionario,inteiro):
     dic = reduz_listas(dic,inteiro)
     for i in range(inteiro):
         for k,v in dic.items():
-            if dicVals[i] in v:
+            if dicVals[i] in v and v not in mdt:
                 mdt.append(k)
     return mdt
+print(atribui_mandatos({'A':12000, 'B':7500, 'C':4500, 'D':3000}, 7))
 def obtem_partidos(info):
     names = []
     for i, j in info.items():
