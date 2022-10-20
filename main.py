@@ -6,13 +6,14 @@ def limpa_texto(texto):
     texto = texto.replace('\f', '')
     texto = texto.replace('\r', '')
     return texto
+
 def corta_texto(texto,numero):#DUVIDA AQUI, E SUPOSTO APARECER PALAVRA COMPLETA CASO NUM < LEN DA PRIMEIRA PALVRA
     if len(limpa_texto(texto)) > numero:
         texto1 = texto[:numero] #Primeiro string com o numero de caracteres
         texto2 = texto[numero:len(limpa_texto(texto))] #Segundo string com o resto dos caracteres\
         if texto1.count(' ') != 0:
             texto1 = texto[:texto1.rindex(' ')]
-            texto2 = texto[texto1.rindex(' '):len(limpa_texto(texto))]
+            texto2 = texto[len(texto1):len(limpa_texto(texto))]
             return texto1,texto2
         elif texto1.count(' ') == 0:
             texto1 = ''
@@ -21,7 +22,10 @@ def corta_texto(texto,numero):#DUVIDA AQUI, E SUPOSTO APARECER PALAVRA COMPLETA 
         else:
             return texto1,texto2
     else:
-        return texto
+        texto1 = texto
+        texto2 = ' '
+        return texto1,texto2
+
 def insere_espacos(texto,numero):
     texto = limpa_texto(texto)
     i = 0
@@ -34,27 +38,23 @@ def insere_espacos(texto,numero):
         else:
             i += 1
     return texto
-print(insere_espacos('Fundamentos da programacao!!!!', 50))
+
 def justifica_texto(texto,numero):
     if type(texto) != str or type(numero) != int:
         raise ValueError('argumentos invalidos')
-
-    '''texto = limpa_texto(texto)
-    txt = (corta_texto(texto,numero) for i in range (0, len(texto), numero)) #"Tuplificar" o texto com indice do numero introduzido
+    texto = limpa_texto(texto)
+    k = 0
+    txt = list(corta_texto(texto,numero) for i in range (0, len(texto), numero)) #"Tuplificar" o texto com indice do numero introduzido
     for i in range(len(txt)):
-        txt[i] = corta_texto(txt[i],numero)
+        txt[i] = corta_texto(texto[k:],numero)[0]
+        k += len(txt[i])
+    for i in range(len(txt)):
         txt[i] = insere_espacos(txt[i],numero)
-    return txt'''
+    txt = tuple(txt)
+    return txt
 
-print(corta_texto('Computers are incredibly fast, accurate and stupid. Human beings are incredibly slow inaccurate, and brilliant. Together they are powerful beyond imagination.',60))
-def produto_interno(tuplo1,tuplo2):
-    if len(tuplo1) != len(tuplo2):
-        raise ValueError('tuplos invalidos')
-    sum, i = 0, 0
-    while i < len(tuplo1):
-        sum += tuplo1[i] * tuplo2[i]
-        i += 1
-    return float(sum)
+#print(corta_texto('Computers are incredibly fast, accurate and stupid. Human beings are incredibly slow inaccurate, and brilliant. Together they are powerful beyond imagination.',60))
+
 def calcula_quocientes(dicionario,inteiro):
     dic = dicionario
     dicKeys = list(dicionario)
@@ -121,6 +121,14 @@ info = {
 'Tatooine': {'deputados': 3,
     'votos': {'A':3000, 'B':1900}}}
 #print(obtem_resultado_eleicoes(info))
+def produto_interno(tuplo1,tuplo2):
+    if len(tuplo1) != len(tuplo2):
+        raise ValueError('tuplos invalidos')
+    sum, i = 0, 0
+    while i < len(tuplo1):
+        sum += tuplo1[i] * tuplo2[i]
+        i += 1
+    return float(sum)
 cad = ('Computers are incredibly \n\tfast, \n\t\taccurate'
 ' \n\t\t\tand stupid. \n Human beings are incredibly slow '
 'inaccurate, and brilliant. \n Together they are powerful '
