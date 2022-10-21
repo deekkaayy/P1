@@ -142,12 +142,43 @@ cad = ('Computers are incredibly \n\tfast, \n\t\taccurate'
 ' \n\t\t\tand stupid. \n Human beings are incredibly slow '
 'inaccurate, and brilliant. \n Together they are powerful '
 'beyond imagination.')
-print(justifica_texto(cad,60))
 
 def verifica_convergencia(tuplo1,tuplo2,tuplo3,real):
+    soluc = list(produto_interno(tuplo1[i],tuplo3) for i in range(len(tuplo1)))
+    for i in range(len(soluc)):
+        soluc[i] -= tuplo2[i]
+        if soluc[i] >= real:
+            return False
+    return True
 
-    return
+def trocaPosicao(list, pos1, pos2):
+    list[pos1], list[pos2] = list[pos2], list[pos1]
+    return list
+def retira_zeros_diagonal(tuplo1,tuplo2):
+    lista1 = list(tuplo1)
+    lista2 = list(tuplo2)
+    for x,y in range(len(lista1)-1),reversed(range(len(lista1)-1)):
+        if lista1[x][y] != 0:
+            for i in range(1,len(lista1)):
+                if lista1[i][y] == 0:
+                    trocaPosicao(lista1,i,x)
+                    trocaPosicao(lista2,i,x)
+
+    '''lista1 = list(tuplo1)
+    lista2 = list(tuplo2)
+    k = len(tuplo1)-1
+    for i in range(len(lista1)):
+        j = 0
+        while lista1[j][k] != 0:
+            j += 1
+        lista1 = trocaPosicao(lista1,j,i)
+        lista2 = trocaPosicao(lista2,j,i)
+        k -= 1'''
+    return lista1,lista2
 A1, c1 = ((1, -0.5), (-1, 2)), (-0.4, 1.9)
+A2, c2 = ((0, 1, 1), (1, 0, 0), (0, 1, 0)), (1, 2, 3)
+
+print(retira_zeros_diagonal(A2, c2))
 
 
 
