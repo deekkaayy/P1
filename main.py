@@ -129,6 +129,8 @@ def produto_interno(tuplo1,tuplo2):
         sum += tuplo1[i] * tuplo2[i]
         i += 1
     return float(sum)
+
+def
 cad = ('Computers are incredibly \n\tfast, \n\t\taccurate'
 ' \n\t\t\tand stupid. \n Human beings are incredibly slow '
 'inaccurate, and brilliant. \n Together they are powerful '
@@ -136,7 +138,8 @@ cad = ('Computers are incredibly \n\tfast, \n\t\taccurate'
 print(justifica_texto(cad,60))
 
 def verifica_convergencia(tuplo1,tuplo2,tuplo3,real):
-    A1, c1 = ((1, -0.5), (-1, 2)), (-0.4, 1.9)
+
+A1, c1 = ((1, -0.5), (-1, 2)), (-0.4, 1.9)
 
     return
 
