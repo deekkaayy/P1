@@ -10,10 +10,10 @@ def limpa_texto(texto):
 def corta_texto(texto,numero):#DUVIDA AQUI, E SUPOSTO APARECER PALAVRA COMPLETA CASO NUM < LEN DA PRIMEIRA PALVRA
     if len(limpa_texto(texto)) > numero:
         texto1 = texto[:numero] #Primeiro string com o numero de caracteres
-        texto2 = texto[numero:len(limpa_texto(texto))] #Segundo string com o resto dos caracteres\
+        texto2 = texto[numero:] #Segundo string com o resto dos caracteres\
         if texto1.count(' ') != 0:
             texto1 = texto[:texto1.rindex(' ')]
-            texto2 = texto[len(texto1):len(limpa_texto(texto))]
+            texto2 = texto[len(texto1)+1:]
             return texto1,texto2
         elif texto1.count(' ') == 0:
             texto1 = ''
@@ -50,6 +50,9 @@ def justifica_texto(texto,numero):
         k += len(txt[i])
     for i in range(len(txt)):
         txt[i] = insere_espacos(txt[i],numero)
+    txt[-1] = limpa_texto(txt[-1])
+    while len(txt[-1]) < numero:
+        txt[-1] += ' '
     txt = tuple(txt)
     return txt
 
@@ -64,6 +67,7 @@ def calcula_quocientes(dicionario,inteiro):
         for j in range(1, (inteiro + 1)):
             dic[dicKeys[i]] += [dicVals[i] / j]
     return dic
+
 def reduz_listas(dic,int):
     dicKeys= list(dic.keys())
     for i in range(len(dicKeys)):
@@ -73,6 +77,7 @@ def reduz_listas(dic,int):
                 dic[dicKeys[i]].pop()
                 p += 1
     return dic
+
 def atribui_mandatos(dicionario,inteiro):
     dic = calcula_quocientes(dicionario,inteiro)
     dicVals = []
@@ -87,6 +92,7 @@ def atribui_mandatos(dicionario,inteiro):
             if dicVals[i] in v:
                 mdt.append(k)
     return mdt
+
 def obtem_partidos(info):
     names = []
     for i, j in info.items():
@@ -97,6 +103,7 @@ def obtem_partidos(info):
     names = list(set(names))
     names = sorted(names)
     return names
+
 def obtem_resultado_eleicoes(info):
     names = obtem_partidos(info)
     somas = {}
@@ -113,6 +120,7 @@ def obtem_resultado_eleicoes(info):
                                 somas[n] = soma
     somas = sorted()
     return list(somas.values())
+
 info = {
 'Endor': {'deputados': 7,
     'votos': {'A':12000, 'B':7500, 'C':5250, 'D':3000}},
@@ -120,7 +128,7 @@ info = {
     'votos': {'B':11500, 'A':9000, 'E':5000, 'D':1500}},
 'Tatooine': {'deputados': 3,
     'votos': {'A':3000, 'B':1900}}}
-#print(obtem_resultado_eleicoes(info))
+
 def produto_interno(tuplo1,tuplo2):
     if len(tuplo1) != len(tuplo2):
         raise ValueError('tuplos invalidos')
@@ -130,7 +138,6 @@ def produto_interno(tuplo1,tuplo2):
         i += 1
     return float(sum)
 
-def
 cad = ('Computers are incredibly \n\tfast, \n\t\taccurate'
 ' \n\t\t\tand stupid. \n Human beings are incredibly slow '
 'inaccurate, and brilliant. \n Together they are powerful '
@@ -139,9 +146,10 @@ print(justifica_texto(cad,60))
 
 def verifica_convergencia(tuplo1,tuplo2,tuplo3,real):
 
+    return
 A1, c1 = ((1, -0.5), (-1, 2)), (-0.4, 1.9)
 
-    return
+
 
 
 
