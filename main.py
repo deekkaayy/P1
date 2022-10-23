@@ -41,18 +41,22 @@ def insere_espacos(texto, numero):
 
 def justifica_texto(texto, numero):
     if type(texto) != str or type(numero) != int:
-        raise ValueError('argumentos invalidos')
+        raise ValueError('justifica_texto:argumentos invalidos')
     texto = limpa_texto(texto)
-    k = 0
+
+    dist = texto.index(' ', texto.index(' ') + 1) - texto.index(' ')
+    if dist > numero:
+        raise ValueError('justifica_texto:argumentos invalidos')
+    primeiroEspaco = texto.index(' ')
+
+    if primeiroEspaco > numero :
+        raise ValueError('justifica_texto:argumentos invalidos')
+
     i = 0
-    #linhas = round(len(texto)/numero)  # Contar o numero de linhas
     textoFinal = []
     while len(texto) > 0 :
         textoFinal.append(corta_texto(texto, numero)[0])
         texto = corta_texto(texto,numero)[1]
-        k = len(textoFinal[i])
-        #if textoFinal[i].count(' ') == 0 and texto[k+1] != ' ':
-        #    raise ValueError('justifica texto: argumentos invalidos')
         i += 1
     for i in range(len(textoFinal)-1):
         textoFinal[i] = insere_espacos(textoFinal[i], numero)
@@ -112,7 +116,7 @@ def obtem_partidos(info):
 
 def obtem_resultado_eleicoes(info):
     if type(info) != dict:
-        raise ValueError('obtem resultado eleicoes: argumento invalido')
+        raise ValueError('obtem_resultado_eleicoes: argumento invalido')
     #if len(info.keys())
     names = obtem_partidos(info)
     somas = {}
@@ -132,7 +136,7 @@ def obtem_resultado_eleicoes(info):
 
             if type(j) == int: #Se o tipo corresponder à um unico inteiro(numero deputados) fazer a soma dos deputados
                 if j == 0:
-                    raise ValueError('obtem resultado eleicoes: argumento invalido')
+                    raise ValueError('obtem_resultado_eleicoes: argumento invalido')
                 else: somaDep += j
 
 
