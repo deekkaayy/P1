@@ -9,7 +9,8 @@ def limpa_texto(texto):
 
 
 def corta_texto(texto, numero):
-    if len(limpa_texto(texto)) > numero:
+    texto = limpa_texto(texto)
+    if len(texto) > numero:
         texto1 = texto[:numero]  # Primeiro string com o numero de caracteres
         texto2 = texto[numero:]  # Segundo string com o resto dos caracteres\
         if texto1.count(' ') != 0:
@@ -24,9 +25,8 @@ def corta_texto(texto, numero):
             return texto1, texto2
     else:
         texto1 = texto
-        texto2 = ' '
+        texto2 = ''
         return texto1, texto2
-
 
 def insere_espacos(texto, numero):
     texto = limpa_texto(texto)
@@ -47,36 +47,40 @@ def justifica_texto(texto, numero):
         raise ValueError('argumentos invalidos')
     texto = limpa_texto(texto)
     k = 0
-    txt = list(corta_texto(texto, numero) for i in
-               range(0, len(texto), numero))  # "Tuplificar" o texto com indice do numero introduzido
-    for i in range(len(txt)):
-        txt[i] = corta_texto(texto[k:], numero)[0]
-        k += len(txt[i])
-    for i in range(len(txt)):
-        txt[i] = insere_espacos(txt[i], numero)
-    txt[-1] = limpa_texto(txt[-1])
-    while len(txt[-1]) < numero:
-        txt[-1] += ' '
-    txt = tuple(txt)
-    return txt
+    linhas = round(len(texto)/numero)  # Contar o numero de linhas
+    textoFinal = []
+    for i in range(linhas):
+        while texto[k].isalpha() != True: # Chegar ao proximo caracter letra
+            k +=1
+        textoFinal.append(corta_texto(texto[k:], numero)[0])
+        k += len(textoFinal[i])
+        if textoFinal[i].count(' ') == 0 and texto[k+1] != ' ':
+            raise ValueError('justifica texto: argumentos invalidos')
+    for i in range(linhas):
+        textoFinal[i] = insere_espacos(textoFinal[i], numero)
+    textoFinal[-1] = limpa_texto(textoFinal[-1])
+    while len(textoFinal[-1]) < numero:
+        textoFinal[-1] += ' '
+    textoFinal = tuple(textoFinal)
+    return textoFinal
 
 
 def calcula_quocientes(dicionario, inteiro):
-    dic = dicionario
-    dicKeys = list(dicionario)
-    dicVals = list(dicionario.values())
-    for i in range(len(dicionario)):
-        dic[dicKeys[i]] = []
-        for j in range(1, (inteiro + 1)):
-            dic[dicKeys[i]] += [dicVals[i] / j]
-    return dic
-
+    if len(list(dicionario.keys())) >= 1: #Ter pelomenos um partido
+        dic = dict(dicionario)
+        dicKeys = list(dic)
+        dicVals = list(dic.values())
+        for i in range(len(dic)):
+            dic[dicKeys[i]] = []
+            for j in range(1, (inteiro + 1)):
+                dic[dicKeys[i]] += [dicVals[i] / j]
+        return dic
 
 def atribui_mandatos(dicionario,inteiro):
     dic = calcula_quocientes(dicionario,inteiro)
     keys = list(dic.keys())
     vals = list(dic.values())
-    valsOrdenados = []
+    valsOrdenados = [] #Lista com os quocientes ordenados com o objetivo de descobrir os mais votados
     mdt = []
     for i in dic.values():
         valsOrdenados += i
@@ -84,19 +88,16 @@ def atribui_mandatos(dicionario,inteiro):
     valsOrdenados.sort(reverse=True)
     valsOrdenados = valsOrdenados[:inteiro]
     j = 0
-    k = len(vals)
+    k = len(vals)-1 #Percorre-se pelo ultimo para dar prioridade às menos votadas
     while len(mdt) != inteiro:
-        if valsOrdenados[j] in vals[k-1]:
-            mdt += keys[k-1]
+        if valsOrdenados[j] in vals[k]:
+            mdt += keys[k]
+            vals[k].remove(valsOrdenados[j])
             j += 1
-            k = len(vals)
+            k = len(vals)-1
         else:
-            k -= 1
+            k -= 1  #Caso não pertença, recua-se um para verificar se existe no partido seguinte
     return mdt
-
-
-
-
 
 
 def obtem_partidos(info):
@@ -114,49 +115,42 @@ def obtem_partidos(info):
 def obtem_resultado_eleicoes(info):
     if type(info) != dict:
         raise ValueError('obtem resultado eleicoes: argumento invalido')
-
+    #if len(info.keys())
     names = obtem_partidos(info)
     somas = {}
     somaDep = 0
-    for n in range(len(names)):
+    for n in range(len(names)): #Index das letras
         soma = 0
-        for i, j in info.items():
-            if type(j) == dict:
-                for j, k in j.items():
-
-                    if type(k) == dict:
-                        for l, m in k.items():
-                            if names[n] == l:
-
+        for i, j in info.items(): #Aceder items do info
+            if type(j) == dict: #Aceder dicionarios correspondentes aos nomes dos partidos
+                for j, k in j.items(): #Aceder items do dicionario dos nomes
+                    if type(k) == dict: #Aceder ao dicionario que contém os votos
+                        for l, m in k.items():  #Aceder votos individuais
+                            if names[n] == l:   #Caso a letra dos votos coincide com o index, fazer soma
                                 soma += m
                                 somas[n] = soma
-    for i in info.values():
+    for i in info.values(): #Aceder valores de info
         for j in i.values():
-            if type(j) == int:
-              somaDep += j
 
-    for n in range(len(somas)):
+            if type(j) == int: #Se o tipo corresponder à um unico inteiro(numero deputados) fazer a soma dos deputados
+                if j == 0:
+                    raise ValueError('obtem resultado eleicoes: argumento invalido')
+                else: somaDep += j
+
+
+    for n in range(len(somas)): #Listificar as somas dos votos
         somas[n] = [somas[n]]
-        somas[n].insert(0,names[n])
+        somas[n].insert(0,names[n]) #Atribuir letra dos votos às somas
+
     somas = list(somas.values())
-    somasFin = somas
-    somas = dict(somas)
-    listaDep = atribui_mandatos(somas,somaDep)
-    for n in range(len(somasFin)):
-        somasFin[n].insert(1,listaDep.count(names[n]))
-        somasFin[n] = tuple(somasFin[n])
-    somasFin = sorted(somasFin, key=lambda x: x[2],reverse=True)
-    return somasFin
-
-info = {
-            'Endor':   {'deputados': 7,
-                        'votos': {'A':12000, 'B':7500, 'C':5250, 'D':3000}},
-            'Hoth':    {'deputados': 6,
-                        'votos': {'A':9000, 'B':11500, 'D':1500, 'E':5000}},
-            'Tatooine': {'deputados': 3,
-                        'votos': {'A':3000, 'B':1900}}}
-print(obtem_resultado_eleicoes(info))
-
+    resultado = somas #Fazer copia da lista para preparar o resultado final
+    somas = dict(somas) #Tornar as somas para dicionario para que se possa fazer a atribuição de mandatos
+    listaDep = atribui_mandatos(somas,somaDep) #Lista dos deputados atribuidos
+    for n in range(len(resultado)): #Contagem do numero de deputados por letra
+        resultado[n].insert(1,listaDep.count(names[n]))
+        resultado[n] = tuple(resultado[n])
+    resultado = sorted(resultado, key=lambda x: x[2],reverse=True) #Ordenaçao pelo numero de votos
+    return resultado
 
 
 def produto_interno(tuplo1, tuplo2):
@@ -178,52 +172,48 @@ def verifica_convergencia(tuplo1, tuplo2, tuplo3, real):
     return True
 
 
-def trocaPosicao(list, pos1, pos2):
+def trocaPosicao(list, pos1, pos2): #Funcao suplementar para efetuar a troca de linhas na funcao retira zeros diagonal
     list[pos1], list[pos2] = list[pos2], list[pos1]
     return list
 
-
 def retira_zeros_diagonal(tuplo1, tuplo2):
-    lista1 = list(tuplo1)
-    lista2 = list(tuplo2)
-    x = 0
-    y = 0
-    for i in range(len(lista1)):
-        x = y
-        if lista1[x][y] == 0:
-            for j in range(2):
-                if lista1[j][y] != 0:
-                    break
-            trocaPosicao(lista1,j,x)
-            trocaPosicao(lista2, j, x)
-            y += 1
-        else:
-            y += 1
-    tuplo1 = tuple(lista1)
-    tuplo2 = tuple(lista2)
-    return tuplo1, tuplo2
+    tuplo1 = list(tuplo1)
+    tuplo2 = list(tuplo2)
+    for i in range(len(tuplo1)):
+        if tuplo1[i][i] == 0:
+            for k in range(len(tuplo1)):
+                if tuplo1[k][i] != 0 and tuplo1[i][k] != 0:
+                    trocaPosicao(tuplo1,i,k)
+                    trocaPosicao(tuplo2,i,k)
+    tuplo1 = tuple(tuplo1)
+    tuplo2 = tuple(tuplo2)
+    return tuplo1,tuplo2
 
 def eh_diagonal_dominante(tuplo):
-    for x in range(len(tuplo)):
-        if max(tuplo[x]) == tuplo[x][x]:
-            return True
-        else:
-            return False
+    diag = []
+    for i in range(len(tuplo)):
+        diag.append(tuplo[i][i])
+    maxs = []
+    for i in range(len(tuplo)):
+        maxs.append(max(tuplo[i]))
+    if diag == maxs:
+        return True
+    else:
+        return False
+
 def resolve_sistema(tuplo1, tuplo2, real):
-    if len(tuplo1) != len(tuplo2) or type(tuplo1) != tuple or type(tuplo2) != tuple or type(real) != float:
-        raise ValueError('resolve sistema: argumentos invalidos')
+    if len(tuplo1) != len(tuplo2) or type(tuplo1) != tuple or type(tuplo2) != tuple:
+        raise ValueError('resolve_sistema: argumentos invalidos')
     if eh_diagonal_dominante(tuplo1) == False:
-        raise ValueError('resolve sistema: matriz nao diagonal dominante')
-    x = []
+        raise ValueError('resolve_sistema: matriz nao diagonal dominante')
+    x = [] #Criacao da primeira iteracao de x(vetor de zeros)
     for i in range(len(tuplo1)):
         x.append(0)
     while True:
         for i in range(len(tuplo1)):
-            x[i] = x[i] + (tuplo2[i]-(produto_interno(tuplo1[i],x)))/tuplo1[i][i]
+            x[i] = x[i] + (tuplo2[i]-(produto_interno(tuplo1[i],x)))/tuplo1[i][i] #aplicacao da formula
         if verifica_convergencia(tuplo1,tuplo2,x,real) == True:
             break
     for i in range(len(x)):
         x[i] = float(round(x[i]))
     return x
-A4, c4 = ((2, -1, -1), (2, -9, 7), (-2, 5, -9)), (-8, 8, -6)
-print(resolve_sistema(A4, c4, 1e-20))
