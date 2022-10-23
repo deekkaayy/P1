@@ -72,16 +72,6 @@ def calcula_quocientes(dicionario, inteiro):
     return dic
 
 
-def reduz_listas(dic, int):
-    dicKeys = list(dic.keys())
-    for i in range(len(dicKeys)):
-        p = 0
-        while p <= i:
-            if len(dicKeys[i]) != 0:
-                dic[dicKeys[i]].pop()
-                p += 1
-    return dic
-
 def atribui_mandatos(dicionario,inteiro):
     dic = calcula_quocientes(dicionario,inteiro)
     keys = list(dic.keys())
@@ -122,9 +112,11 @@ def obtem_partidos(info):
 
 
 def obtem_resultado_eleicoes(info):
+    if type(info) != dict:
+        raise ValueError('obtem resultado eleicoes: argumento invalido')
+
     names = obtem_partidos(info)
     somas = {}
-    soma = 0
     somaDep = 0
     for n in range(len(names)):
         soma = 0
@@ -156,8 +148,14 @@ def obtem_resultado_eleicoes(info):
     somasFin = sorted(somasFin, key=lambda x: x[2],reverse=True)
     return somasFin
 
-
-
+info = {
+            'Endor':   {'deputados': 7,
+                        'votos': {'A':12000, 'B':7500, 'C':5250, 'D':3000}},
+            'Hoth':    {'deputados': 6,
+                        'votos': {'A':9000, 'B':11500, 'D':1500, 'E':5000}},
+            'Tatooine': {'deputados': 3,
+                        'votos': {'A':3000, 'B':1900}}}
+print(obtem_resultado_eleicoes(info))
 
 
 
@@ -212,10 +210,20 @@ def eh_diagonal_dominante(tuplo):
         else:
             return False
 def resolve_sistema(tuplo1, tuplo2, real):
+    if len(tuplo1) != len(tuplo2) or type(tuplo1) != tuple or type(tuplo2) != tuple or type(real) != float:
+        raise ValueError('resolve sistema: argumentos invalidos')
+    if eh_diagonal_dominante(tuplo1) == False:
+        raise ValueError('resolve sistema: matriz nao diagonal dominante')
     x = []
     for i in range(len(tuplo1)):
         x.append(0)
+    while True:
+        for i in range(len(tuplo1)):
+            x[i] = x[i] + (tuplo2[i]-(produto_interno(tuplo1[i],x)))/tuplo1[i][i]
+        if verifica_convergencia(tuplo1,tuplo2,x,real) == True:
+            break
+    for i in range(len(x)):
+        x[i] = float(round(x[i]))
     return x
 A4, c4 = ((2, -1, -1), (2, -9, 7), (-2, 5, -9)), (-8, 8, -6)
 print(resolve_sistema(A4, c4, 1e-20))
-
