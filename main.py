@@ -8,7 +8,7 @@ def limpa_texto(texto):
     return texto
 
 
-def corta_texto(texto, numero):  # DUVIDA AQUI, E SUPOSTO APARECER PALAVRA COMPLETA CASO NUM < LEN DA PRIMEIRA PALVRA
+def corta_texto(texto, numero):
     if len(limpa_texto(texto)) > numero:
         texto1 = texto[:numero]  # Primeiro string com o numero de caracteres
         texto2 = texto[numero:]  # Segundo string com o resto dos caracteres\
@@ -82,24 +82,32 @@ def reduz_listas(dic, int):
                 p += 1
     return dic
 
-
 def atribui_mandatos(dicionario,inteiro):
     dic = calcula_quocientes(dicionario,inteiro)
-    dicValsOrdenada = []
-    dicVals = list(dic.values())
-    dicKeys = list(dic.keys())
-    for i in range(len(dic)):
-        dicValsOrdenada += dic[dicKeys[i]]
-    dicValsOrdenada.sort(reverse=True)
+    keys = list(dic.keys())
+    vals = list(dic.values())
+    valsOrdenados = []
     mdt = []
-    #dic = reduz_listas(dic,inteiro)
-    for i in range(inteiro):
-        numero = dicValsOrdenada[i]
-        position = dicVals[i].index(int(numero))
-        mdt += dicKeys[position]
+    for i in dic.values():
+        valsOrdenados += i
+    valsOrdenados = list(set(valsOrdenados))
+    valsOrdenados.sort(reverse=True)
+    valsOrdenados = valsOrdenados[:inteiro]
+    j = 0
+    k = len(vals)
+    while len(mdt) != inteiro:
+        if valsOrdenados[j] in vals[k-1]:
+            mdt += keys[k-1]
+            j += 1
+            k = len(vals)
+        else:
+            k -= 1
     return mdt
 
-print(atribui_mandatos({'A':12000, 'B':7500, 'C':4500, 'D':3000}, 7))
+
+
+
+
 
 def obtem_partidos(info):
     names = []
@@ -117,27 +125,40 @@ def obtem_resultado_eleicoes(info):
     names = obtem_partidos(info)
     somas = {}
     soma = 0
+    somaDep = 0
     for n in range(len(names)):
         soma = 0
         for i, j in info.items():
             if type(j) == dict:
                 for j, k in j.items():
+
                     if type(k) == dict:
                         for l, m in k.items():
                             if names[n] == l:
+
                                 soma += m
                                 somas[n] = soma
-    somas = sorted()
-    return list(somas.values())
+    for i in info.values():
+        for j in i.values():
+            if type(j) == int:
+              somaDep += j
+
+    for n in range(len(somas)):
+        somas[n] = [somas[n]]
+        somas[n].insert(0,names[n])
+    somas = list(somas.values())
+    somasFin = somas
+    somas = dict(somas)
+    listaDep = atribui_mandatos(somas,somaDep)
+    for n in range(len(somasFin)):
+        somasFin[n].insert(1,listaDep.count(names[n]))
+        somasFin[n] = tuple(somasFin[n])
+    somasFin = sorted(somasFin, key=lambda x: x[2],reverse=True)
+    return somasFin
 
 
-info = {
-    'Endor': {'deputados': 7,
-              'votos': {'A': 12000, 'B': 7500, 'C': 5250, 'D': 3000}},
-    'Hoth': {'deputados': 6,
-             'votos': {'B': 11500, 'A': 9000, 'E': 5000, 'D': 1500}},
-    'Tatooine': {'deputados': 3,
-                 'votos': {'A': 3000, 'B': 1900}}}
+
+
 
 
 def produto_interno(tuplo1, tuplo2):
@@ -149,10 +170,6 @@ def produto_interno(tuplo1, tuplo2):
         i += 1
     return float(sum)
 
-cad = ('Computers are incredibly \n\tfast, \n\t\taccurate'
-       ' \n\t\t\tand stupid. \n Human beings are incredibly slow '
-       'inaccurate, and brilliant. \n Together they are powerful '
-       'beyond imagination.')
 
 def verifica_convergencia(tuplo1, tuplo2, tuplo3, real):
     soluc = list(produto_interno(tuplo1[i], tuplo3) for i in range(len(tuplo1)))
@@ -195,16 +212,10 @@ def eh_diagonal_dominante(tuplo):
         else:
             return False
 def resolve_sistema(tuplo1, tuplo2, real):
-    lista1 = [list(i) for i in tuplo1]
-    lista2 = list[tuplo2]
-    for x in range(len(tuplo1)):
-        lista1E = []
-        lista1D = lista1.remove(x)
-        lista1E = lista1[x][x]
-        lista1D = produto_interno(lista1D,lista2[x])
-
-    return lista1
-
+    x = []
+    for i in range(len(tuplo1)):
+        x.append(0)
+    return x
 A4, c4 = ((2, -1, -1), (2, -9, 7), (-2, 5, -9)), (-8, 8, -6)
-#print(resolve_sistema(A4,c4,1e-20))
+print(resolve_sistema(A4, c4, 1e-20))
 
