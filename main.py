@@ -1,13 +1,9 @@
 def limpa_texto(texto):
     texto = ' '.join(texto.split())  # Juntar vários espaços
-    texto = texto.replace('\t', '')  # Substituição dos caracteres brancos
-    texto = texto.replace('\n', '')
-    texto = texto.replace('\v', '')
-    texto = texto.replace('\f', '')
-    texto = texto.replace('\r', '')
     return texto
 
-
+cad = ('Ipsum   dolore  consectetur  sed  dolorem.  Dolor  sed  eius consectetur  consectetur dolore modi consectetur. Voluptatem sit  velit  amet  dolor neque est. Quiquia porro tempora sed dolore  adipisci  dolore.  Velit dolore numquam dolore dolor labore.')
+print(limpa_texto(cad))
 def corta_texto(texto, numero):
     texto = limpa_texto(texto)
     if len(texto) > numero:
@@ -28,6 +24,7 @@ def corta_texto(texto, numero):
         texto2 = ''
         return texto1, texto2
 
+
 def insere_espacos(texto, numero):
     texto = limpa_texto(texto)
     i = 0
@@ -47,23 +44,24 @@ def justifica_texto(texto, numero):
         raise ValueError('argumentos invalidos')
     texto = limpa_texto(texto)
     k = 0
-    linhas = round(len(texto)/numero)  # Contar o numero de linhas
+    i = 0
+    #linhas = round(len(texto)/numero)  # Contar o numero de linhas
     textoFinal = []
-    for i in range(linhas):
-        while texto[k].isalpha() != True: # Chegar ao proximo caracter letra
-            k +=1
-        textoFinal.append(corta_texto(texto[k:], numero)[0])
-        k += len(textoFinal[i])
-        if textoFinal[i].count(' ') == 0 and texto[k+1] != ' ':
-            raise ValueError('justifica texto: argumentos invalidos')
-    for i in range(linhas):
+    while len(texto) > 0 :
+        textoFinal.append(corta_texto(texto, numero)[0])
+        texto = corta_texto(texto,numero)[1]
+        k = len(textoFinal[i])
+        #if textoFinal[i].count(' ') == 0 and texto[k+1] != ' ':
+        #    raise ValueError('justifica texto: argumentos invalidos')
+        i += 1
+    for i in range(len(textoFinal)-1):
         textoFinal[i] = insere_espacos(textoFinal[i], numero)
     textoFinal[-1] = limpa_texto(textoFinal[-1])
     while len(textoFinal[-1]) < numero:
         textoFinal[-1] += ' '
     textoFinal = tuple(textoFinal)
     return textoFinal
-
+print(justifica_texto(cad,60))
 
 def calcula_quocientes(dicionario, inteiro):
     if len(list(dicionario.keys())) >= 1: #Ter pelomenos um partido
