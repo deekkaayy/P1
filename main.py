@@ -61,8 +61,6 @@ def justifica_texto(texto, numero):
     return txt
 
 
-# print(corta_texto('Computers are incredibly fast, accurate and stupid. Human beings are incredibly slow inaccurate, and brilliant. Together they are powerful beyond imagination.',60))
-
 def calcula_quocientes(dicionario, inteiro):
     dic = dicionario
     dicKeys = list(dicionario)
@@ -85,21 +83,23 @@ def reduz_listas(dic, int):
     return dic
 
 
-def atribui_mandatos(dicionario, inteiro):
-    dic = calcula_quocientes(dicionario, inteiro)
-    dicVals = []
+def atribui_mandatos(dicionario,inteiro):
+    dic = calcula_quocientes(dicionario,inteiro)
+    dicValsOrdenada = []
+    dicVals = list(dic.values())
     dicKeys = list(dic.keys())
     for i in range(len(dic)):
-        dicVals += dic[dicKeys[i]]
-    dicVals.sort(reverse=True)
+        dicValsOrdenada += dic[dicKeys[i]]
+    dicValsOrdenada.sort(reverse=True)
     mdt = []
-    dic = reduz_listas(dic, inteiro)
+    #dic = reduz_listas(dic,inteiro)
     for i in range(inteiro):
-        for k, v in dic.items():
-            if dicVals[i] in v:
-                mdt.append(k)
+        numero = dicValsOrdenada[i]
+        position = dicVals[i].index(int(numero))
+        mdt += dicKeys[position]
     return mdt
 
+print(atribui_mandatos({'A':12000, 'B':7500, 'C':4500, 'D':3000}, 7))
 
 def obtem_partidos(info):
     names = []
@@ -149,12 +149,10 @@ def produto_interno(tuplo1, tuplo2):
         i += 1
     return float(sum)
 
-
 cad = ('Computers are incredibly \n\tfast, \n\t\taccurate'
        ' \n\t\t\tand stupid. \n Human beings are incredibly slow '
        'inaccurate, and brilliant. \n Together they are powerful '
        'beyond imagination.')
-
 
 def verifica_convergencia(tuplo1, tuplo2, tuplo3, real):
     soluc = list(produto_interno(tuplo1[i], tuplo3) for i in range(len(tuplo1)))
@@ -192,18 +190,21 @@ def retira_zeros_diagonal(tuplo1, tuplo2):
 
 def eh_diagonal_dominante(tuplo):
     for x in range(len(tuplo)):
-        y = x
-        if max(tuplo[x]) == tuplo[x][y]:
+        if max(tuplo[x]) == tuplo[x][x]:
             return True
         else:
             return False
 def resolve_sistema(tuplo1, tuplo2, real):
-    lista1 = list(tuplo1)
-    for x in range(len(lista1)):
-        del lista1[x][x]
-        sol = list(produto_interno(tuplo1[x],tuplo2))
-    return lista1[x]
-A4, c4 = ((2, -1, -1), (2, -9, 7), (-2, 5, -9)), (-8, 8, -6)
-print(resolve_sistema(A4, c4, 1e-20))
+    lista1 = [list(i) for i in tuplo1]
+    lista2 = list[tuplo2]
+    for x in range(len(tuplo1)):
+        lista1E = []
+        lista1D = lista1.remove(x)
+        lista1E = lista1[x][x]
+        lista1D = produto_interno(lista1D,lista2[x])
 
+    return lista1
+
+A4, c4 = ((2, -1, -1), (2, -9, 7), (-2, 5, -9)), (-8, 8, -6)
+#print(resolve_sistema(A4,c4,1e-20))
 
