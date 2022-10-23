@@ -192,12 +192,20 @@ def retira_zeros_diagonal(tuplo1, tuplo2):
     return tuplo1,tuplo2
 
 def eh_diagonal_dominante(tuplo):
+    tuplo = list(tuplo)
+    for i in range(len(tuplo)):
+        tuplo[i] = list(tuplo[i])
+    for i in range(len(tuplo)):
+        for j in range(len(tuplo)):
+            tuplo[i][j] = abs(tuplo[i][j])
     diag = []
     for i in range(len(tuplo)):
         diag.append(tuplo[i][i])
+
     maxs = []
     for i in range(len(tuplo)):
         maxs.append(max(tuplo[i]))
+
     if diag == maxs:
         return True
     else:
