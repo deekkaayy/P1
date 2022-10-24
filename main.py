@@ -86,7 +86,6 @@ def atribui_mandatos(dicionario,inteiro):
     mdt = []
     for i in dic.values():
         valsOrdenados += i
-    valsOrdenados = list(set(valsOrdenados))
     valsOrdenados.sort(reverse=True)
     valsOrdenados = valsOrdenados[:inteiro]
     j = 0
