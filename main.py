@@ -39,17 +39,15 @@ def insere_espacos(texto, numero):
 
 
 def justifica_texto(texto, numero):
-    if type(texto) != str or type(numero) != int:
-        raise ValueError('justifica_texto:argumentos invalidos')
     texto = limpa_texto(texto)
+    if type(texto) != str or type(numero) != int:
+        raise ValueError('justifica_texto: argumentos invalidos')
 
-    dist = texto.index(' ', texto.index(' ') + 1) - texto.index(' ')
-    if dist > numero:
-        raise ValueError('justifica_texto:argumentos invalidos')
     primeiroEspaco = texto.index(' ')
-
     if primeiroEspaco > numero :
-        raise ValueError('justifica_texto:argumentos invalidos')
+        raise ValueError('justifica_texto: argumentos invalidos')
+
+
 
     i = 0
     textoFinal = []
@@ -64,7 +62,7 @@ def justifica_texto(texto, numero):
         textoFinal[-1] += ' '
     textoFinal = tuple(textoFinal)
     return textoFinal
-
+print(justifica_texto('Boas pessoal',5))
 def calcula_quocientes(dicionario, inteiro):
     if len(list(dicionario.keys())) >= 1: #Ter pelomenos um partido
         dic = dict(dicionario)
@@ -114,7 +112,6 @@ def obtem_partidos(info):
 def obtem_resultado_eleicoes(info):
     if type(info) != dict:
         raise ValueError('obtem_resultado_eleicoes: argumento invalido')
-    #if len(info.keys())
     names = obtem_partidos(info)
     somas = {}
     somaDep = 0
@@ -130,11 +127,8 @@ def obtem_resultado_eleicoes(info):
                                 somas[n] = soma
     for i in info.values(): #Aceder valores de info
         for j in i.values():
-
             if type(j) == int: #Se o tipo corresponder à um unico inteiro(numero deputados) fazer a soma dos deputados
-                if j == 0:
-                    raise ValueError('obtem_resultado_eleicoes: argumento invalido')
-                else: somaDep += j
+                somaDep += j
 
 
     for n in range(len(somas)): #Listificar as somas dos votos
@@ -209,7 +203,7 @@ def eh_diagonal_dominante(tuplo):
         return False
 
 def resolve_sistema(tuplo1, tuplo2, real):
-    if len(tuplo1) != len(tuplo2) or type(tuplo1) != tuple or type(tuplo2) != tuple:
+    if len(tuplo1) != len(tuplo2) or type(tuplo1) != tuple or type(tuplo2) != tuple or type(real) != float or type(real) != int:
         raise ValueError('resolve_sistema: argumentos invalidos')
     if eh_diagonal_dominante(tuplo1) == False:
         raise ValueError('resolve_sistema: matriz nao diagonal dominante')
