@@ -40,11 +40,14 @@ def insere_espacos(texto, numero):
 
 def justifica_texto(texto, numero):
     texto = limpa_texto(texto)
-    if type(texto) != str or type(numero) != int:
+    if type(texto) != str or type(numero) != int or len(texto) == 0:
         raise ValueError('justifica_texto: argumentos invalidos')
 
     primeiroEspaco = texto.index(' ')
     if primeiroEspaco > numero :
+        raise ValueError('justifica_texto: argumentos invalidos')
+
+    if numero > len(texto):
         raise ValueError('justifica_texto: argumentos invalidos')
 
     i = 0
@@ -60,7 +63,6 @@ def justifica_texto(texto, numero):
         textoFinal[-1] += ' '
     textoFinal = tuple(textoFinal)
     return textoFinal
-
 
 def calcula_quocientes(dicionario, inteiro):
     if len(list(dicionario.keys())) >= 1: #Ter pelomenos um partido
@@ -87,7 +89,7 @@ def atribui_mandatos(dicionario,inteiro):
     k = len(vals)-1 #Percorre-se pelo ultimo para dar prioridade às menos votadas
     while len(mdt) != inteiro:
         if valsOrdenados[j] in vals[k]:
-            mdt += keys[k]
+            mdt.append(keys[k])
             vals[k].remove(valsOrdenados[j])
             j += 1
             k = len(vals)-1
@@ -109,8 +111,23 @@ def obtem_partidos(info):
 
 
 def obtem_resultado_eleicoes(info):
-    if type(info) != dict:
+    if type(info) != dict or len(info) == 0:
         raise ValueError('obtem_resultado_eleicoes: argumento invalido')
+    infoKeys,infoValues = list(info.keys()), list(info.values())
+    if len(infoKeys) == 0 or len(infoValues) == 0:
+        raise ValueError('obtem_resultado_eleicoes: argumento invalido')
+    for i, j in info.items():
+        if type(j) == dict:
+            for j, k in j.items():
+                if type(k) == dict:
+                    if len(k) <= 1:
+                        raise ValueError('obtem_resultado_eleicoes: argumento invalido')
+    for i in info.values():
+        for j in i.keys():
+            if j not in ('votos', 'deputados'):
+                raise ValueError('obtem_resultado_eleicoes: argumento invalido')
+
+
     names = obtem_partidos(info)
     somas = {}
     somaDep = 0
@@ -120,13 +137,19 @@ def obtem_resultado_eleicoes(info):
             if type(j) == dict: #Aceder dicionarios correspondentes aos nomes dos partidos
                 for j, k in j.items(): #Aceder items do dicionario dos nomes
                     if type(k) == dict: #Aceder ao dicionario que contém os votos
+                        if len(k) == 0:
+                            raise ValueError('obtem_resultado_eleicoes: argumento invalido')
                         for l, m in k.items():  #Aceder votos individuais
                             if names[n] == l:   #Caso a letra dos votos coincide com o index, fazer soma
-                                soma += m
-                                somas[n] = soma
+                                if type(m) == int or float:
+                                    soma += m
+                                    somas[n] = soma
+                                else:
+                                    raise ValueError('obtem_resultado_eleicoes: argumento invalido')
+
     for i in info.values(): #Aceder valores de info
         for j in i.values():
-            if type(j) == int: #Se o tipo corresponder à um unico inteiro(numero deputados) fazer a soma dos deputados
+            if type(j) == int and j >= 0: #Se o tipo corresponder à um unico inteiro(numero deputados) fazer a soma dos deputados
                 somaDep += j
 
 
@@ -202,8 +225,12 @@ def eh_diagonal_dominante(tuplo):
         return False
 
 def resolve_sistema(tuplo1, tuplo2, real):
-    if len(tuplo1) != len(tuplo2) or type(tuplo1) != tuple or type(tuplo2) != tuple:
+    if len(tuplo1) != len(tuplo2) or type(tuplo1) != tuple:
         raise ValueError('resolve_sistema: argumentos invalidos')
+
+    '''if type(real) != float or type(real) != int:
+        raise ValueError('resolve_sistema: argumentos invalidos')'''
+
     if eh_diagonal_dominante(tuplo1) == False:
         raise ValueError('resolve_sistema: matriz nao diagonal dominante')
     x = [] #Criacao da primeira iteracao de x(vetor de zeros)
@@ -219,4 +246,3 @@ def resolve_sistema(tuplo1, tuplo2, real):
     return x
 
 
-print(justifica_texto('Boas pessoal',5))
