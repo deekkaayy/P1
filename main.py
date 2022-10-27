@@ -47,8 +47,6 @@ def justifica_texto(texto, numero):
     if primeiroEspaco > numero :
         raise ValueError('justifica_texto: argumentos invalidos')
 
-
-
     i = 0
     textoFinal = []
     while len(texto) > 0 :
@@ -62,7 +60,8 @@ def justifica_texto(texto, numero):
         textoFinal[-1] += ' '
     textoFinal = tuple(textoFinal)
     return textoFinal
-print(justifica_texto('Boas pessoal',5))
+
+
 def calcula_quocientes(dicionario, inteiro):
     if len(list(dicionario.keys())) >= 1: #Ter pelomenos um partido
         dic = dict(dicionario)
@@ -203,7 +202,7 @@ def eh_diagonal_dominante(tuplo):
         return False
 
 def resolve_sistema(tuplo1, tuplo2, real):
-    if len(tuplo1) != len(tuplo2) or type(tuplo1) != tuple or type(tuplo2) != tuple or type(real) != float or type(real) != int:
+    if len(tuplo1) != len(tuplo2) or type(tuplo1) != tuple or type(tuplo2) != tuple:
         raise ValueError('resolve_sistema: argumentos invalidos')
     if eh_diagonal_dominante(tuplo1) == False:
         raise ValueError('resolve_sistema: matriz nao diagonal dominante')
@@ -218,3 +217,6 @@ def resolve_sistema(tuplo1, tuplo2, real):
     for i in range(len(x)):
         x[i] = float(round(x[i]))
     return x
+
+
+print(justifica_texto('Boas pessoal',5))
