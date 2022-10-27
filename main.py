@@ -2,8 +2,7 @@ def limpa_texto(texto):
     texto = ' '.join(texto.split())  # Juntar vários espaços
     return texto
 
-cad = ('Ipsum   dolore  consectetur  sed  dolorem.  Dolor  sed  eius consectetur  consectetur dolore modi consectetur. Voluptatem sit  velit  amet  dolor neque est. Quiquia porro tempora sed dolore  adipisci  dolore.  Velit dolore numquam dolore dolor labore.')
-print(limpa_texto(cad))
+
 def corta_texto(texto, numero):
     texto = limpa_texto(texto)
     if len(texto) > numero:
@@ -65,7 +64,6 @@ def justifica_texto(texto, numero):
         textoFinal[-1] += ' '
     textoFinal = tuple(textoFinal)
     return textoFinal
-print(justifica_texto(cad,60))
 
 def calcula_quocientes(dicionario, inteiro):
     if len(list(dicionario.keys())) >= 1: #Ter pelomenos um partido
